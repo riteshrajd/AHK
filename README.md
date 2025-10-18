@@ -1,92 +1,129 @@
-# ⌨️Key remapper for better typing experience
-except for pressing ctrl, shift, alt, and win key combos, you don't have to use any key row other than the three main key rows, i.e. the alphabet rows.
-This is aimed to reduce the hand movement and improve touch typing experience by placing all the special symbols on the alphabet rows itself.
-## 🟩installation (Windows only currently)
-1. 💾install AHK form [AutoHotkey](https://www.autohotkey.com/)
- website
-2. 📥download all the files and then run them in order > FROM TOP TO BOTTOM
-- run by double clicking the files
-    1. first > , . caps.ahk
-    2. then > num_pad_handling.ahk
+# ⌨️ Key Remapper for a Better Typing Experience
 
-now you are good to go!!
+This project remaps keys to minimize hand movement and improve the touch-typing experience. By using trigger keys (`capslock`, `,`, `.`), you can access all special symbols, navigation, and numpad functionality directly from the three main alphabet rows, eliminating the need to reach for other keys (except for standard Ctrl/Shift/Alt/Win combos).
 
-## ❓How to Disable
-the remappings can easily be toggled on and off from the widows task bar > show hidden icons(near the bottom right corner) > right click the hotkey icons and then disable or exit
+---
 
-- for re-enabling just run the files as mentioned previously
+## 🟩 Installation
 
-## 🔵Remappings 
-`
-','  '.'  'capslock'
-`
-- all the keys except these three will work as usual(even '<'(shift + ,) and '>'(shift + .))
-- these three keys are converted to trigger keys and they remap the following keys when they are held down
-- for capslock >> press capslock twice whithin 0.2 seconds
-- Reason for choosing these keys is that, for pressing ',' and '.' the middle finger and ring finger will be used which are strong, and there is also a factor of convenience for choosing all these triggers and their remmappings.
-- I have tried to keep the remappings such that stronger fingers are used for generally more frequently used keys(for the most part) and keep the remappings intuitive.
+This key remapper is available for both Windows (via AutoHotkey) and Linux (via a Python script). Please follow the instructions for your operating system.
 
-- remappings for comma & capslock![Alt text](images/comma_&_capslock_remappings.jpg)
+### 🐧 Linux (Fedora)
 
-### Capslock
-- y -> $
-- u -> >
-- i -> =
-- o -> \
-- p -> !
-- [ -> ?
+The Python script provides all the core functionality plus some extras.
 
-- h -> <
-- j -> (
-- k -> +
-- l -> *
-- ; -> -
+1.  **Install Dependencies**: The script relies on the `pynput` library. You can install it using pip:
+    ```bash
+    pip install pynput
+    ```
 
-- n -> _
-- m -> )
+2.  **Run the Script**: To start the remapper, run the Python script. You may need to run it with `sudo` to grant it the necessary permissions to listen to and control your keyboard.
+    ```bash
+    sudo python key_remapper.py
+    ```
 
-### ',' key
-- q -> ~
-- w -> .
-- e -> ,
-- r -> &
-- t -> ^
+3.  **(Optional) Run on Startup**: To have the script run automatically every time you log in, you can add it to your Startup Applications or create a `systemd` service for it.
 
-- a -> @
-- s -> %
-- d -> {
-- f -> [
-- g -> '
+### 🪟 Windows
 
-- z -> #
-- x -> `
-- c -> }
-- v -> ]
-- b -> |
+1.  💾 **Install AHK**: Download and install AutoHotkey from the official [AutoHotkey website](https://www.autohotkey.com/).
+2.  📥 **Run the Scripts**: Download all the `.ahk` files and run them in the following order by double-clicking them:
+    1.  `first > , . caps.ahk`
+    2.  `then > num_pad_handling.ahk`
 
-### '.' key
-- k -> Enter
-- j -> Backspace
-- i -> shift + enter
-- m -> ctrl + bakcspace
-- n -> delete
+You are now good to go!
 
-- e -> Up arrow
-- d -> Down arrow
-- s -> left arrow
-- f -> right arrow
-- r -> ctrl + right arrow
-- w -> ctrl + left arrow
+---
 
-### '.' + ',' (NUM PAD -> experimantal) 
-+ `w -> 7    e -> 8    r -> 9`
-+ `s -> 4    d -> 5    f -> 6     g -> 0`
-+ `x -> 1    c -> 2    v -> 3`
+## ❓ How to Disable / Toggle
 
-+ `a -> ','`
-+ `z -> '.'`
+#### **Linux**
 
-- for using this :-
-    - first hold down '.', and while holding it down tap or hold the ','
-    - this will change the arrow keys layer of '.' to NUM_PAD
-    
+-   **To Disable**: You need to stop the Python script. Find its Process ID (PID) and kill it, or use `pkill`.
+    ```bash
+    # This will find and kill the process running the script
+    sudo pkill -f key_remapper.py
+    ```
+-   **To Re-enable**: Simply run the script again as mentioned in the installation steps.
+
+#### **Windows**
+
+-   The remappings can be toggled on and off from the Windows taskbar. Go to the system tray (the "show hidden icons" arrow in the bottom-right), right-click the green 'H' hotkey icons, and select "Pause Script," "Suspend Hotkeys," or "Exit."
+-   To re-enable, just run the `.ahk` files again.
+
+---
+
+## 🔵 Remappings
+
+The keys `,`, `.`, and `capslock` are **trigger keys**. When you hold one of them down, the keys on the alphabet rows are remapped to new functions.
+
+-   **To use Caps Lock normally**: Press `capslock` twice within 0.2 seconds.
+
+### **Core Remappings (Both Windows & Linux)**
+
+![Remappings for comma and capslock triggers](images/comma_&_capslock_remappings.jpg)
+
+#### **Hold `Capslock` Layer (Symbols)**
+
+-   `y` → `$`
+-   `u` → `>`
+-   `i` → `=`
+-   `o` → `\`
+-   `p` → `!`
+-   `[` → `?`
+-   `h` → `<`
+-   `j` → `(`
+-   `k` → `+`
+-   `l` → `*`
+-   `;` → `-`
+-   `n` → `_`
+-   `m` → `)`
+
+#### **Hold `,` Layer (Symbols)**
+
+-   `q` → `~`
+-   `w` → `.`
+-   `e` → `,`
+-   `r` → `&`
+-   `t` → `^`
+-   `a` → `@`
+-   `s` → `%`
+-   `d` → `{`
+-   `f` → `[`
+-   `g` → `'`
+-   `z` → `#`
+-   `x` → \`
+-   `c` → `}`
+-   `v` → `]`
+-   `b` → `|`
+
+#### **Hold `.` Layer (Navigation & Editing)**
+
+-   `k` → `Enter`
+-   `j` → `Backspace`
+-   `i` → `Shift` + `Enter`
+-   `m` → `Ctrl` + `Backspace` (delete word)
+-   `n` → `Delete`
+-   `e` → `Up Arrow`
+-   `d` → `Down Arrow`
+-   `s` → `Left Arrow`
+-   `f` → `Right Arrow`
+-   `r` → `Ctrl` + `Right Arrow` (next word)
+-   `w` → `Ctrl` + `Left Arrow` (previous word)
+
+#### **Hold `.` then hold `,` Layer (Numpad - Experimental)**
+
+*First hold down `.`, and while holding it, also hold down `,` to activate this layer.*
+
+-   `w` → `7` | `e` → `8` | `r` → `9`
+-   `s` → `4` | `d` → `5` | `f` → `6` | `g` → `0`
+-   `x` → `1` | `c` → `2` | `v` → `3`
+-   `a` → `,`
+-   `z` → `.`
+
+### **✨ Linux (Python Script) Extras**
+
+These additional mappings are available in the `key_remapper.py` script:
+
+-   `Capslock` + `f` / `d` → **App Switching** (`Alt`+`Tab`)
+-   `.` + `h` → **Delete Whole Line** (`Shift`+`Home` then `Delete`)
