@@ -10,19 +10,20 @@ This key remapper is available for both Windows (via AutoHotkey) and Linux (via 
 
 ### 🐧 Linux (Fedora)
 
-The Python script provides all the core functionality plus some extras.
+The Python script uses the `evdev` library to read keyboard input directly. You'll need to install this dependency and grant your user the correct permissions.
 
-1.  **Install Dependencies**: The script relies on the `pynput` library. You can install it using pip:
+1.  **Install the Dependency**: The script requires the `evdev` Python library. Open a terminal and install it using pip:
     ```bash
-    pip install pynput
+    pip install evdev
     ```
 
-2.  **Run the Script**: To start the remapper, run the Python script. You may need to run it with `sudo` to grant it the necessary permissions to listen to and control your keyboard.
+2.  **Run the Script**: After logging back in, navigate to the repository folder and run the Python script:
     ```bash
-    sudo python key_remapper.py
+    python3 key_remapper.py
     ```
+    The script will now run without `sudo` and will continue running in that terminal until you stop it (`Ctrl+C`).
 
-3.  **(Optional) Run on Startup**: To have the script run automatically every time you log in, you can add it to your Startup Applications or create a `systemd` service for it.
+3.  **(Optional) Run on Startup**: To have the script run automatically every time you log in, you can add it to your desktop environment's "Startup Applications."
 
 ### 🪟 Windows
 
