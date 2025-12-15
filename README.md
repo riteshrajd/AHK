@@ -80,6 +80,17 @@ A dedicated mode to control your cursor without leaving the keyboard.
 | | Hold `.` | Medium Speed / Medium Scroll |
 | | Hold `Space` | **Turbo Speed** / Fast Scroll |
 
+*current mouse settings*
+```
+# Mouse Settings - Speeds (Supports decimals/floats now!)
+MOUSE_SPEED_NORMAL = 1
+MOUSE_SPEED_MEDIUM = 12     # Dot held
+MOUSE_SPEED_FAST = 25       # Space held
+
+SCROLL_SPEED_NORMAL = 0.2
+SCROLL_SPEED_MEDIUM = 3     # Dot held
+SCROLL_SPEED_FAST = 10       # Space held
+```
 ---
 
 ### **Core Remappings (Global)**
