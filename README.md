@@ -1,6 +1,6 @@
 # ⌨️ Key Remapper for a Better Typing Experience
 
-This project remaps keys to minimize hand movement and improve the touch-typing experience. By using trigger keys (`capslock`, `,`, `.`), you can access all special symbols, navigation, and numpad functionality directly from the three main alphabet rows, eliminating the need to reach for other keys (except for standard Ctrl/Shift/Alt/Win combos).
+This project remaps keys to minimize hand movement and improve the touch-typing experience. By using trigger keys (`capslock`, `,`, `.`), you can access all special symbols, navigation, numpad functionality, and **mouse controls** directly from the three main alphabet rows, eliminating the need to reach for other keys (except for standard Ctrl/Shift/Alt/Win combos).
 
 ---
 
@@ -8,22 +8,25 @@ This project remaps keys to minimize hand movement and improve the touch-typing 
 
 This key remapper is available for both Windows (via AutoHotkey) and Linux (via a Python script). Please follow the instructions for your operating system.
 
-### 🐧 Linux (Fedora)
+### 🐧 Linux (Fedora/Debian/Arch)
 
-The Python script uses the `evdev` library to read keyboard input directly. You'll need to install this dependency and grant your user the correct permissions.
+The Python script uses the `evdev` library to intercept and inject input events. It requires root permissions to grab the keyboard device exclusively.
 
-1.  **Install the Dependency**: The script requires the `evdev` Python library. Open a terminal and install it using pip:
+1.  **Install the Dependency**: The script requires the `evdev` Python library.
     ```bash
-    pip install evdev
+    # Fedora
+    sudo dnf install python3-evdev
+    # OR via pip (globally or in a venv)
+    sudo pip install evdev
     ```
 
-2.  **Run the Script**: After logging back in, navigate to the repository folder and run the Python script:
+2.  **Run the Script**: Navigate to the repository folder and run the script with `sudo`:
     ```bash
-    python3 key_remapper.py
+    sudo python3 key_remapper.py
     ```
-    The script will now run without `sudo` and will continue running in that terminal until you stop it (`Ctrl+C`).
+    *Note: The script must be run as root to grab the input device successfully.*
 
-3.  **(Optional) Run on Startup**: To have the script run automatically every time you log in, you can add it to your desktop environment's "Startup Applications."
+3.  **(Optional) Run on Startup**: To run this automatically, you will need to create a systemd service or add a sudo-enabled command to your startup applications (configuring `sudoers` to allow this script without a password is recommended for startup automation).
 
 ### 🪟 Windows
 
@@ -40,17 +43,15 @@ You are now good to go!
 
 #### **Linux**
 
--   **To Disable**: You need to stop the Python script. Find its Process ID (PID) and kill it, or use `pkill`.
+-   **To Disable**: The script runs in your terminal. simply press `Ctrl+C` to stop it safely. The keyboard will return to normal immediately.
+-   **If running in background**:
     ```bash
-    # This will find and kill the process running the script
     sudo pkill -f key_remapper.py
     ```
--   **To Re-enable**: Simply run the script again as mentioned in the installation steps.
 
 #### **Windows**
 
--   The remappings can be toggled on and off from the Windows taskbar. Go to the system tray (the "show hidden icons" arrow in the bottom-right), right-click the green 'H' hotkey icons, and select "Pause Script," "Suspend Hotkeys," or "Exit."
--   To re-enable, just run the `.ahk` files again.
+-   The remappings can be toggled on and off from the Windows taskbar. Go to the system tray, right-click the green 'H' hotkey icons, and select "Pause Script" or "Exit."
 
 ---
 
@@ -60,43 +61,42 @@ The keys `,`, `.`, and `capslock` are **trigger keys**. When you hold one of the
 
 -   **To use Caps Lock normally**: Press `capslock` twice within 0.2 seconds.
 
-### **Core Remappings (Both Windows & Linux)**
+### **🖱️ Mouse Mode (Linux Only)**
+
+A dedicated mode to control your cursor without leaving the keyboard.
+
+-   **Toggle ON/OFF**: Press `.` (Dot) + `u`
+    *(Hold Dot, tap U, release both)*
+
+**Once Mouse Mode is Active:**
+
+| Function | Key | Description |
+| :--- | :--- | :--- |
+| **Movement** | `e`, `s`, `d`, `f` | Up, Left, Down, Right (Matches Arrow/Vim positions) |
+| **Clicks** | `j` | **Left Click** |
+| | `k` | **Right Click** |
+| **Scrolling** | Hold `m` | Turns `e/s/d/f` into **Scroll** Up/Left/Down/Right |
+| **Speed** | (None) | Normal Speed |
+| | Hold `.` | Medium Speed / Medium Scroll |
+| | Hold `Space` | **Turbo Speed** / Fast Scroll |
+
+---
+
+### **Core Remappings (Global)**
 
 ![Remappings for comma and capslock triggers](images/comma_&_capslock_remappings.jpg)
 
 #### **Hold `Capslock` Layer (Symbols)**
 
--   `y` → `$`
--   `u` → `>`
--   `i` → `=`
--   `o` → `\`
--   `p` → `!`
--   `[` → `?`
--   `h` → `<`
--   `j` → `(`
--   `k` → `+`
--   `l` → `*`
--   `;` → `-`
--   `n` → `_`
--   `m` → `)`
+-   `y` → `$` | `u` → `>` | `i` → `=` | `o` → `\` | `p` → `!`
+-   `h` → `<` | `j` → `(` | `k` → `+` | `l` → `*` | `;` → `-`
+-   `n` → `_` | `m` → `)` | `[` → `?`
 
 #### **Hold `,` Layer (Symbols)**
 
--   `q` → `~`
--   `w` → `.`
--   `e` → `,`
--   `r` → `&`
--   `t` → `^`
--   `a` → `@`
--   `s` → `%`
--   `d` → `{`
--   `f` → `[`
--   `g` → `'`
--   `z` → `#`
--   `x` → \`
--   `c` → `}`
--   `v` → `]`
--   `b` → `|`
+-   `q` → `~` | `w` → `.` | `e` → `,` | `r` → `&` | `t` → `^`
+-   `a` → `@` | `s` → `%` | `d` → `{` | `f` → `[` | `g` → `'`
+-   `z` → `#` | `x` → \` | `c` → `}` | `v` → `]` | `b` → `|`
 
 #### **Hold `.` Layer (Navigation & Editing)**
 
@@ -112,19 +112,17 @@ The keys `,`, `.`, and `capslock` are **trigger keys**. When you hold one of the
 -   `r` → `Ctrl` + `Right Arrow` (next word)
 -   `w` → `Ctrl` + `Left Arrow` (previous word)
 
-#### **Hold `.` then hold `,` Layer (Numpad - Experimental)**
+#### **Hold `.` then hold `,` Layer (Numpad)**
 
 *First hold down `.`, and while holding it, also hold down `,` to activate this layer.*
 
 -   `w` → `7` | `e` → `8` | `r` → `9`
 -   `s` → `4` | `d` → `5` | `f` → `6` | `g` → `0`
 -   `x` → `1` | `c` → `2` | `v` → `3`
--   `a` → `,`
--   `z` → `.`
+-   `a` → `,` | `z` → `.`
 
-### **✨ Linux (Python Script) Extras**
+### **✨ Linux Extras**
 
-These additional mappings are available in the `key_remapper.py` script:
-
--   `Capslock` + `f` / `d` → **App Switching** (`Alt`+`Tab`)
--   `.` + `h` → **Delete Whole Line** (`Shift`+`Home` then `Delete`)
+-   `Capslock` + `f` → `Alt` + `Tab` (App Switcher)
+-   `Capslock` + `d` → `Alt` + `Shift` + `Tab` (App Switcher Reverse)
+-   `.` + `h` → **Delete Whole Line**
