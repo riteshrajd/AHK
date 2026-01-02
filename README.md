@@ -1,9 +1,3 @@
-Here is the updated **README.md**.
-
-I have restructured the **Linux** section to prioritize **Kanata** (as it is safer and faster) while keeping the Python script as a "Legacy" option since it still offers mouse control. I also included the **One-Click Setup Command** for Fedora users.
-
----
-
 # ⌨️ Key Remapper for a Better Typing Experience
 
 This project remaps keys to minimize hand movement and improve the touch-typing experience. By using trigger keys (`capslock`, `,`, `.`), you can access all special symbols, navigation, numpad functionality, and **mouse controls** directly from the three main alphabet rows, eliminating the need to reach for other keys (except for standard Ctrl/Shift/Alt/Win combos).
@@ -12,140 +6,142 @@ This project remaps keys to minimize hand movement and improve the touch-typing 
 
 ## 🟩 Installation
 
-### 🐧 Linux (Fedora/Debian/Arch)
+This key remapper is available for Windows (AutoHotkey) and Linux (Kanata or Python).
 
-You have two options. **Option A (Kanata)** is recommended for speed, safety (undetectable in Online Assessments), and reliability. **Option B (Python)** is a legacy version that includes Mouse Keys.
+### 🐧 Linux Method 1: Kanata (Recommended)
+**Best for:** Performance, gaming, and Online Assessments (Undetectable). Runs at the kernel level.
 
-#### **Option A: Kanata (Recommended 🚀)**
-
-This runs at the kernel level using `uinput`. It is 100% undetectable by browsers and has zero latency.
-
-**Fedora / Linux Quick Start (Copy & Paste):**
-Run this entire block in your terminal to download Kanata, generate the config, and start it immediately.
+**Quick Setup (Fedora/Debian/Arch)**
+Copy and paste this entire block into your terminal to set up and run Kanata immediately:
 
 ```bash
-# 1. Create directory and download Kanata binary
+# 1. Download Kanata binary
 mkdir -p ~/kanata
-wget https://github.com/jtroo/kanata/releases/download/v1.6.1/kanata -O ~/kanata/kanata
+wget [https://github.com/jtroo/kanata/releases/download/v1.6.1/kanata](https://github.com/jtroo/kanata/releases/download/v1.6.1/kanata) -O ~/kanata/kanata
 chmod +x ~/kanata/kanata
 
-# 2. Generate the Configuration File (Caps, Dot, Comma layers)
-cat > ~/kanata/config.kbd <<'EOF'
-(defsrc
-  caps  q  w  e  r  t  y  u  i  o  p  [  ]  \
-  a     s  d  f  g  h  j  k  l  ;  '
-  z     x  c  v  b  n  m  ,  .  /
-)
+# 2. Setup permissions (uinput) so it runs smoothly
+sudo groupadd uinput
+sudo usermod -aG uinput $USER
+echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' | sudo tee /etc/udev/rules.d/99-input.rules
+sudo udevadm control --reload-rules && sudo udevadm trigger
 
-(defalias
-  ;; --- TRIGGERS ---
-  ;; Caps: Tap=Nothing, DoubleTap=RealCaps, Hold=CapsLayer
-  d_caps    (tap-dance 200 (XX caps))
-  my_caps   (tap-hold-press 200 200 @d_caps (layer-toggle caps_layer))
-
-  ;; Comma & Dot: Aggressive 1ms trigger (Instant Layer Switch)
-  my_comma  (tap-hold-press 1 1 , (layer-toggle comma_layer))
-  my_dot    (tap-hold-press 1 1 . (layer-toggle dot_layer))
-
-  ;; Macros
-  del_ln    (macro home S-end bspc)
-)
-
-;; 1. DEFAULT LAYER
-(deflayer default
-  @my_caps  q  w  e  r  t  y  u  i  o  p  [  ]  \
-  a         s  d  f  g  h  j  k  l  ;  '
-  z         x  c  v  b  n  m  @my_comma  @my_dot  /
-)
-
-;; 2. CAPS LAYER (Symbols 1)
-(deflayer caps_layer
-  _         _    _    _    _    _    S-4  S-.  =    \    S-1  S-/  _  _
-  _         _    _    _    _    S-,  S-9  S-=  S-8  -    _
-  _         _    _    _    _    S--  S-0  _    _    _
-)
-
-;; 3. COMMA LAYER (Symbols 2)
-(deflayer comma_layer
-  _         S-`  .    ,    S-7  S-6  _    _    _    _    _    _    _  _
-  S-2       S-5  S-[  [    '    _    _    _    _    _    _
-  S-3       `    S-]  ]    S-\  _    _    _    _    _
-)
-
-;; 4. DOT LAYER (Navigation)
-(deflayer dot_layer
-  _         _    C-lft up   C-rght _    _    _    S-ret _    _    _    _  _
-  _         lft  down  rght _    _    bspc ret  _    _    _
-  _         _    _     _    _    del  C-bspc (layer-toggle numpad_layer) _ _
-)
-
-;; 5. NUMPAD LAYER (Activated by holding . then ,)
-(deflayer numpad_layer
-  _         _    7    8    9    _    _    _    _    _    _    _    _  _
-  ,         4    5    6    0    _    _    _    _    _    _
-  .         1    2    3    _    _    _    _    _    _
-)
-EOF
-
-# 3. Run Kanata (Requires sudo to grab keyboard input)
-sudo ~/kanata/kanata -c ~/kanata/config.kbd
+# 3. Run it! (Assuming you are inside this repo folder)
+# Note: You might need to logout/login once for permissions to take full effect without sudo.
+# For now, we run with sudo to ensure it works instantly:
+sudo ~/kanata/kanata -c kanata/config.kbd
 
 ```
 
-#### **Option B: Python Script (Legacy)**
+---
 
-*Best for: Users who strictly need Mouse Keys (Kanata config currently excludes mouse).*
+### 🐧 Linux Method 2: Python Script (Legacy)
 
-1. **Install Dependency**:
+The Python script uses the `evdev` library to intercept and inject input events. Good for quick testing if you don't want to download binaries.
+
+1. **Install the Dependency**: The script requires the `evdev` Python library.
 ```bash
-sudo dnf install python3-evdev  # Fedora
-# OR
+# Fedora
+sudo dnf install python3-evdev
+# OR via pip (globally or in a venv)
 sudo pip install evdev
 
 ```
 
 
-2. **Run Script**:
+2. **Run the Script**: Navigate to the repository folder and run the script with `sudo`:
 ```bash
 sudo python3 key_remapper.py
 
 ```
 
 
+*Note: The script must be run as root to grab the input device successfully.*
+3. **(Optional) Run on Startup**: To run this automatically, you will need to create a systemd service or add a sudo-enabled command to your startup applications.
 
 ### 🪟 Windows
 
-1. 💾 **Install AHK**: Download [AutoHotkey](https://www.autohotkey.com/).
-2. 📥 **Run Scripts**: Double-click the files in this order:
+1. 💾 **Install AHK**: Download and install AutoHotkey from the official [AutoHotkey website](https://www.autohotkey.com/).
+2. 📥 **Run the Scripts**: Download all the `.ahk` files and run them in the following order by double-clicking them:
 1. `first > , . caps.ahk`
 2. `then > num_pad_handling.ahk`
 
 
 
+You are now good to go!
+
 ---
 
 ## ❓ How to Disable / Toggle
 
-**Linux (Kanata or Python)**
+#### **Linux (Kanata)**
 
-* Press `Ctrl+C` in the terminal window running the script.
-* If running in background: `sudo pkill kanata` or `sudo pkill -f key_remapper`.
+* Press `Ctrl+C` in the terminal window running Kanata.
+* If running in background: `sudo pkill kanata`
 
-**Windows**
+#### **Linux (Python)**
 
-* Right-click the green 'H' icon in the system tray and select "Exit".
+* **To Disable**: The script runs in your terminal. simply press `Ctrl+C` to stop it safely. The keyboard will return to normal immediately.
+* **If running in background**:
+```bash
+sudo pkill -f key_remapper.py
+
+```
+
+
+
+#### **Windows**
+
+* The remappings can be toggled on and off from the Windows taskbar. Go to the system tray, right-click the green 'H' hotkey icons, and select "Pause Script" or "Exit."
 
 ---
 
 ## 🔵 Remappings
 
-The keys `,`, `.`, and `capslock` are **trigger keys**. Hold them down to access layers.
+The keys `,`, `.`, and `capslock` are **trigger keys**. When you hold one of them down, the keys on the alphabet rows are remapped to new functions.
+
+* **To use Caps Lock normally**: Press `capslock` twice within 0.2 seconds.
+
+### **🖱️ Mouse Mode (Linux Python Only)**
+
+*Note: Mouse mode is currently only available in the Python version of the script.*
+
+A dedicated mode to control your cursor without leaving the keyboard.
+
+* **Toggle ON/OFF**: Press `.` (Dot) + `u`
+*(Hold Dot, tap U, release both)*
+
+**Once Mouse Mode is Active:**
+
+| Function | Key | Description |
+| --- | --- | --- |
+| **Movement** | `e`, `s`, `d`, `f` | Up, Left, Down, Right (Matches Arrow/Vim positions) |
+| **Clicks** | `j` | **Left Click** |
+|  | `k` | **Right Click** |
+| **Scrolling** | Hold `m` | Turns `e/s/d/f` into **Scroll** Up/Left/Down/Right |
+| **Speed** | (None) | Normal Speed |
+|  | Hold `.` | Medium Speed / Medium Scroll |
+|  | Hold `Space` | **Turbo Speed** / Fast Scroll |
+
+*current mouse settings*
+
+```
+# Mouse Settings - Speeds (Supports decimals/floats now!)
+MOUSE_SPEED_NORMAL = 1
+MOUSE_SPEED_MEDIUM = 12     # Dot held
+MOUSE_SPEED_FAST = 25       # Space held
+
+SCROLL_SPEED_NORMAL = 0.2
+SCROLL_SPEED_MEDIUM = 3     # Dot held
+SCROLL_SPEED_FAST = 10       # Space held
+
+```
+
+---
 
 ### **Core Remappings (Global)**
 
 #### **Hold `Capslock` Layer (Symbols)**
-
-*Double-tap CapsLock to toggle actual CapsLock.*
 
 * `y` → `$` | `u` → `>` | `i` → `=` | `o` → `\` | `p` → `!`
 * `h` → `<` | `j` → `(` | `k` → `+` | `l` → `*` | `;` → `-`
@@ -159,12 +155,17 @@ The keys `,`, `.`, and `capslock` are **trigger keys**. Hold them down to access
 
 #### **Hold `.` Layer (Navigation & Editing)**
 
-* `k` → `Enter` | `i` → `Shift+Enter`
-* `j` → `Backspace` | `m` → `Ctrl+Backspace`
+* `k` → `Enter`
+* `j` → `Backspace`
+* `i` → `Shift` + `Enter`
+* `m` → `Ctrl` + `Backspace` (delete word)
 * `n` → `Delete`
-* `e` / `d` / `s` / `f` → `Up` / `Down` / `Left` / `Right`
-* `w` / `r` → `Ctrl+Left` / `Ctrl+Right` (Word skip)
-* `Capslock` + `f` → `Alt+Tab` | `Capslock` + `d` → `Alt+Shift+Tab`
+* `e` → `Up Arrow`
+* `d` → `Down Arrow`
+* `s` → `Left Arrow`
+* `f` → `Right Arrow`
+* `r` → `Ctrl` + `Right Arrow` (next word)
+* `w` → `Ctrl` + `Left Arrow` (previous word)
 
 #### **Hold `.` then hold `,` Layer (Numpad)**
 
@@ -175,13 +176,10 @@ The keys `,`, `.`, and `capslock` are **trigger keys**. Hold them down to access
 * `x` → `1` | `c` → `2` | `v` → `3`
 * `a` → `,` | `z` → `.`
 
----
+### **✨ Linux Extras**
 
-### **🖱️ Mouse Mode (Python Script Only)**
+* `Capslock` + `f` → `Alt` + `Tab` (App Switcher)
+* `Capslock` + `d` → `Alt` + `Shift` + `Tab` (App Switcher Reverse)
+* `.` + `h` → **Delete Whole Line**
 
-*Note: The Kanata version does not currently support mouse keys. Use the Python script if you need this.*
-
-* **Toggle ON/OFF**: Press `.` (Dot) + `u`
-* **Move**: `e` `s` `d` `f`
-* **Click**: `j` (Left), `k` (Right)
-* **Scroll**: Hold `m` + Move
+```
