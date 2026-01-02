@@ -2,6 +2,10 @@
 
 This project remaps keys to minimize hand movement and improve the touch-typing experience. By using trigger keys (`capslock`, `,`, `.`), you can access all special symbols, navigation, numpad functionality, and **mouse controls** directly from the three main alphabet rows, eliminating the need to reach for other keys (except for standard Ctrl/Shift/Alt/Win combos).
 
+### **Core Remappings (Global)**
+
+![Remappings for comma and capslock triggers](images/comma_&_capslock_remappings.jpg)
+
 ---
 
 ## 🟩 Installation
@@ -12,26 +16,28 @@ This key remapper is available for Windows (AutoHotkey) and Linux (Kanata or Pyt
 **Best for:** Performance, gaming, and Online Assessments (Undetectable). Runs at the kernel level.
 
 **Quick Setup (Fedora/Debian/Arch)**
-Copy and paste this entire block into your terminal to set up and run Kanata immediately:
+Copy and paste this entire block into your terminal. It will download the necessary files (the app and your config) to a `~/kanata` folder and run it immediately. No git cloning required.
 
 ```bash
-# 1. Download Kanata binary
+# 1. Create a folder to store Kanata and the Config
 mkdir -p ~/kanata
-wget [https://github.com/jtroo/kanata/releases/download/v1.6.1/kanata](https://github.com/jtroo/kanata/releases/download/v1.6.1/kanata) -O ~/kanata/kanata
+
+# 2. Download the Kanata binary and the Configuration file
+wget [https://github.com/jtroo/kanata/releases/download/v1.6.1/kanata](https://github.com/jtroo/kanata/releases/download/v1.6.1/kanata] -O ~/kanata/kanata
+wget [https://raw.githubusercontent.com/riteshrajd/AHK/main/kanata/config.kbd](https://raw.githubusercontent.com/riteshrajd/AHK/main/kanata/config.kbd] -O ~/kanata/config.kbd
 chmod +x ~/kanata/kanata
 
-# 2. Setup permissions (uinput) so it runs smoothly
+# 3. Setup permissions (uinput) so it runs smoothly
+# (This allows Kanata to create a virtual keyboard)
 sudo groupadd uinput
 sudo usermod -aG uinput $USER
 echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' | sudo tee /etc/udev/rules.d/99-input.rules
 sudo udevadm control --reload-rules && sudo udevadm trigger
 
-# 3. Run it! (Assuming you are inside this repo folder)
-# Note: You might need to logout/login once for permissions to take full effect without sudo.
-# For now, we run with sudo to ensure it works instantly:
-sudo ~/kanata/kanata -c kanata/config.kbd
+# 4. Run it! 
+# (Keep this terminal open while you want the remappings active)
+sudo ~/kanata/kanata -c ~/kanata/config.kbd
 
-```
 
 ---
 
