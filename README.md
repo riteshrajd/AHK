@@ -38,6 +38,17 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 # (Keep this terminal open while you want the remappings active)
 sudo ~/kanata/kanata -c ~/kanata/config.kbd
 
+```
+
+**To Stop the script**
+```bash
+# Option 1: If you are looking at the running terminal
+# Just press Ctrl + C on your keyboard.
+
+# Option 2: Run this command in a NEW terminal tab to kill it instantly
+sudo pkill kanata
+```
+
 
 ---
 
