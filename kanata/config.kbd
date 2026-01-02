@@ -1,0 +1,66 @@
+(defsrc
+  caps  q  w  e  r  t  y  u  i  o  p  [  ]  \
+  a     s  d  f  g  h  j  k  l  ;  '
+  z     x  c  v  b  n  m  ,  .  /
+)
+
+(defalias
+  ;; --- TRIGGERS ---
+  ;; Caps: Tap=Nothing, DoubleTap=RealCaps, Hold=CapsLayer
+  d_caps    (tap-dance 200 (XX caps))
+  my_caps   (tap-hold-press 200 200 @d_caps (layer-toggle caps_layer))
+
+  ;; Comma & Dot: Aggressive 1ms trigger (Instant Layer Switch)
+  my_comma  (tap-hold-press 1 1 , (layer-toggle comma_layer))
+  my_dot    (tap-hold-press 1 1 . (layer-toggle dot_layer))
+
+  ;; Macros
+  del_ln    (macro home S-end bspc)
+)
+
+;; 1. DEFAULT LAYER (35 keys)
+(deflayer default
+  @my_caps  q  w  e  r  t  y  u  i  o  p  [  ]  \
+  a         s  d  f  g  h  j  k  l  ;  '
+  z         x  c  v  b  n  m  @my_comma  @my_dot  /
+)
+
+;; 2. CAPS LAYER (Symbols 1)
+;; Row 1 (14): y=$ u=> i== o=\ p=! [=?
+;; Row 2 (11): h=< j=( k=+ l=* ;=-
+;; Row 3 (10): n=_ m=)
+(deflayer caps_layer
+  _         _    _    _    _    _    S-4  S-.  =    \    S-1  S-/  _  _
+  _         _    _    _    _    S-,  S-9  S-=  S-8  -    _
+  _         _    _    _    _    S--  S-0  _    _    _
+)
+
+;; 3. COMMA LAYER (Symbols 2)
+;; Row 1 (14): q=~ w=. e=, r=& t=^
+;; Row 2 (11): a=@ s=% d={ f=[ g='
+;; Row 3 (10): z=# x=` c=} v=] b=|
+(deflayer comma_layer
+  _         S-`  .    ,    S-7  S-6  _    _    _    _    _    _    _  _
+  S-2       S-5  S-[  [    '    _    _    _    _    _    _
+  S-3       `    S-]  ]    S-\  _    _    _    _    _
+)
+
+;; 4. DOT LAYER (Navigation)
+;; Row 1 (14): w=C-Lft e=Up r=C-Rgt i=S-Ent
+;; Row 2 (11): s=Lft d=Dn f=Rgt j=Bspc k=Ent
+;; Row 3 (10): n=Del m=C-Bspc ,=NumpadLayer
+(deflayer dot_layer
+  _         _    C-lft up   C-rght _    _    _    S-ret _    _    _    _  _
+  _         lft  down  rght _    _    bspc ret  _    _    _
+  _         _    _     _    _    del  C-bspc (layer-toggle numpad_layer) _ _
+)
+
+;; 5. NUMPAD LAYER
+;; Row 1 (14): w=7 e=8 r=9
+;; Row 2 (11): s=4 d=5 f=6 g=0 a=,
+;; Row 3 (10): x=1 c=2 v=3 z=.
+(deflayer numpad_layer
+  _         _    7    8    9    _    _    _    _    _    _    _    _  _
+  ,         4    5    6    0    _    _    _    _    _    _
+  .         1    2    3    _    _    _    _    _    _
+)
