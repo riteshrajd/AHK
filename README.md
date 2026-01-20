@@ -62,6 +62,11 @@ sudo pkill -9 -f karabiner
 
 Then run the start command again.
 
+### NOTE
+```
+the caps lock toggle works differently in mac, here you have to tap within 200ms to activate caps lock, else if you hold it longer than 200ms or press any key in conjunction with the capslock before 200ms then the layer switching will occur.
+```
+
 
 ### 🐧 Linux Method 1: Kanata (Recommended)
 **Best for:** Performance, gaming, and Online Assessments (Undetectable). Runs at the kernel level.
