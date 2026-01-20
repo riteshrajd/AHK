@@ -1,0 +1,63 @@
+;; Kanata Configuration for macOS
+;; Fixed: Caps Lock now acts like Comma/Dot (Tap = Caps, Hold/Combo = Layer)
+
+(defcfg
+  process-unmapped-keys yes
+)
+
+(defsrc
+  caps  q    w    e    r    t    y    u    i    o    p    [    ]    bksl
+  a     s    d    f    g    h    j    k    l    ;    '
+  z     x    c    v    b    n    m    ,    .    /
+)
+
+(defalias
+  ;; --- TRIGGERS ---
+  ;; Caps: Tap = Real Caps Lock, Hold = CapsLayer
+  ;; 'tap-hold-press' ensures that if you hold Caps and press another key immediately,
+  ;; it activates the layer without waiting 200ms.
+  my_caps   (tap-hold-press 200 200 caps (layer-toggle caps_layer))
+
+  ;; Comma & Dot
+  my_comma  (tap-hold-press 1 1 , (layer-toggle comma_layer))
+  my_dot    (tap-hold-press 1 1 . (layer-toggle dot_layer))
+
+  ;; --- MACROS ---
+  ;; Delete Line (Mac Version: Cmd+Left -> Shift+Cmd+Right -> Backspace)
+  del_ln    (macro M-lft S-M-rght bspc)
+)
+
+;; 1. DEFAULT LAYER
+(deflayer default
+  @my_caps  q    w    e    r    t    y    u    i    o    p    [    ]    bksl
+  a         s    d    f    g    h    j    k    l    ;    '
+  z         x    c    v    b    n    m    @my_comma  @my_dot  /
+)
+
+;; 2. CAPS LAYER (Symbols 1)
+(deflayer caps_layer
+  _         _    _    _    _    _    S-4  S-.  =    bksl S-1  S-/  _    _
+  _         _    _    _    _    S-,  S-9  S-=  S-8  -    _
+  _         _    _    _    _    S--  S-0  _    _    _
+)
+
+;; 3. COMMA LAYER (Symbols 2)
+(deflayer comma_layer
+  _         S-`  .    ,    S-7  S-6  _    _    _    _    _    _    _    _
+  S-2       S-5  S-[  [    '    _    _    _    _    _    _
+  S-3       `    S-]  ]    S-\  _    _    _    _    _
+)
+
+;; 4. DOT LAYER (Navigation - Mac Optimized)
+(deflayer dot_layer
+  _         @del_ln A-lft up   A-rght _    _    _    S-ret _    _    _    _    _
+  _         lft     down  rght _      _    bspc ret  _    _    _
+  _         _       _     _    _      del  A-bspc (layer-toggle numpad_layer) _ _
+)
+
+;; 5. NUMPAD LAYER
+(deflayer numpad_layer
+  _         _    7    8    9    _    _    _    _    _    _    _    _    _
+  ,         4    5    6    0    _    _    _    _    _    _
+  .         1    2    3    _    _    _    _    _    _
+)

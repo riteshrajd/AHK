@@ -12,6 +12,57 @@ This project remaps keys to minimize hand movement and improve the touch-typing 
 
 This key remapper is available for Windows (AutoHotkey) and Linux (Kanata or Python).
 
+## Kanata Setup Guide for macOS
+
+This configuration mimics advanced keyboard layers (Caps Lock as hyper key, Home Row Mods) using Kanata.
+
+### 1. Prerequisites
+
+### Step A: Install the Driver
+1. Install **Karabiner-Elements**.
+2. Open it once to ensure the "Karabiner-DriverKit-VirtualHIDDevice" is installed and approved in System Settings.
+3. **Important:** Fully QUIT the Karabiner-Elements app (Cmd+Q). We only need the driver, not the app.
+
+### Step B: Install Kanata
+Open your terminal and run:
+curl -L -o kanata https://github.com/jtroo/kanata/releases/latest/download/kanata_macos_arm64
+chmod +x kanata
+sudo mv kanata /usr/local/bin/
+
+---
+
+### 2. Install This Configuration
+
+Open your terminal inside this `mac_kanata` folder (where this file is located) and run:
+
+### 3. Create the standard config directory
+mkdir -p ~/.config/kanata
+
+### 2. Copy the config file to that directory
+cp config.kbd ~/.config/kanata/config.kbd
+
+---
+
+### 3. Run Kanata
+
+To start the remapping, run:
+
+sudo kanata --cfg ~/.config/kanata/config.kbd
+
+*Note: If macOS asks for "Input Monitoring" permissions, go to System Settings > Privacy & Security > Input Monitoring, add 'Terminal' (or 'kanata'), and restart the command.*
+
+---
+
+### 4. Troubleshooting
+
+**Error: "exclusive access and device already open"**
+This means Karabiner is still running in the background and fighting for the keyboard. Run this command to force-kill it:
+
+sudo pkill -9 -f karabiner
+
+Then run the start command again.
+
+
 ### 🐧 Linux Method 1: Kanata (Recommended)
 **Best for:** Performance, gaming, and Online Assessments (Undetectable). Runs at the kernel level.
 
