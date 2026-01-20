@@ -12,97 +12,69 @@ This project remaps keys to minimize hand movement and improve the touch-typing 
 
 This key remapper is available for Windows (AutoHotkey) and Linux (Kanata or Python).
 
-## Kanata Setup Guide for macOS
+Here is the completely revamped **macOS** section. It is formatted to match the style of your Linux section, with clear steps, copy-paste terminal commands, and the specific details you requested.
 
-This configuration mimics advanced keyboard layers (Caps Lock as hyper key, Home Row Mods) using Kanata.
+You can replace your current "Kanata Setup Guide for macOS" section with this block:
 
-### 1. Prerequisites
+---
 
-### Step A: Install the Driver
-1. Install **Karabiner-Elements**.
-2. Open it once to ensure the "Karabiner-DriverKit-VirtualHIDDevice" is installed and approved in System Settings.
-3. **Important:** Fully QUIT the Karabiner-Elements app (Cmd+Q). We only need the driver, not the app.
+### 🍎 macOS Method: Kanata (Recommended)
 
-### Step B: Install Kanata
-Open your terminal and run:
+**Best for:** Native performance and deep system integration.
+
+This configuration uses **Kanata** to mimic advanced keyboard layers. It requires the **Karabiner Driver** to inject keystrokes, but runs independently of the Karabiner app.
+
+#### **1. Prerequisites: The Driver**
+
+1. Download and install **[Karabiner-Elements](https://karabiner-elements.pqrs.org/)**.
+2. Open the app once to ensure the extension (`Karabiner-DriverKit-VirtualHIDDevice`) is approved in **System Settings > Privacy & Security**.
+3. **Critical:** Fully **QUIT** the Karabiner-Elements app (Cmd+Q) and ensure it is not running in the menu bar. We only need the *driver* installed, not the app itself.
+
+#### **2. Quick Setup (Terminal)**
+
+Open your terminal inside the `mac_kanata` folder of this repository and run these commands:
+
+```bash
+# 1. Install Kanata (Downloads the binary & moves it to your path)
 curl -L -o kanata https://github.com/jtroo/kanata/releases/latest/download/kanata_macos_arm64
 chmod +x kanata
 sudo mv kanata /usr/local/bin/
 
----
-
-### 2. Install This Configuration
-
-Open your terminal inside this `mac_kanata` folder (where this file is located) and run:
-
-### 3. Create the standard config directory
+# 2. Setup the Configuration Directory
 mkdir -p ~/.config/kanata
 
-### 2. Copy the config file to that directory
+# 3. Copy the config file from this folder to the config directory
 cp config.kbd ~/.config/kanata/config.kbd
 
----
-
-### 3. Run Kanata
-
-To start the remapping, run:
-
+# 4. Run Kanata!
 sudo kanata --cfg ~/.config/kanata/config.kbd
 
-*Note: If macOS asks for "Input Monitoring" permissions, go to System Settings > Privacy & Security > Input Monitoring, add 'Terminal' (or 'kanata'), and restart the command.*
+```
 
----
+*Note: When you run step 4, macOS will ask for "Input Monitoring" permissions. Allow it for **Terminal** (or `kanata`), then run the command again.*
 
-### 4. Troubleshooting
+#### **3. Controls & Notes**
 
-**Error: "exclusive access and device already open"**
-This means Karabiner is still running in the background and fighting for the keyboard. Run this command to force-kill it:
+* **⚠️ Force Quit:** If something goes wrong, press **`Left Ctrl` + `Space` + `Esc**` to instantly kill Kanata and restore your normal keyboard.
+* **Caps Lock Behavior:** On macOS, the "Tap vs Hold" logic is strict.
+* **Tap (<200ms):** Toggles standard Caps Lock.
+* **Hold (>200ms) OR Combo:** Activates the symbols layer.
+* *If you press any other key while holding Caps Lock (even for 10ms), it immediately switches to the layer.*
 
+
+
+#### **4. Troubleshooting**
+
+**Error: "Exclusive access and device already open"**
+This means the Karabiner app is still running in the background and fighting Kanata for control. Run this command to force-kill it:
+
+```bash
 sudo pkill -9 -f karabiner
 
-Then run the start command again.
-
-### NOTE
-the caps lock toggle works differently in mac, here you have to tap within 200ms to activate caps lock, else if you hold it longer than 200ms or press any key in conjunction with the capslock before 200ms then the layer switching will occur.
-
-
-
-### 🐧 Linux Method 1: Kanata (Recommended)
-**Best for:** Performance, gaming, and Online Assessments (Undetectable). Runs at the kernel level.
-
-**Quick Setup (Fedora/Debian/Arch)**
-Copy and paste this entire block into your terminal. It will download the necessary files (the app and your config) to a `~/kanata` folder and run it immediately. No git cloning required.
-
-```bash
-# 1. Create a folder to store Kanata and the Config
-mkdir -p ~/kanata
-
-# 2. Download the Kanata binary and the Configuration file
-wget [https://github.com/jtroo/kanata/releases/download/v1.6.1/kanata](https://github.com/jtroo/kanata/releases/download/v1.6.1/kanata] -O ~/kanata/kanata
-wget [https://raw.githubusercontent.com/riteshrajd/AHK/main/kanata/config.kbd](https://raw.githubusercontent.com/riteshrajd/AHK/main/kanata/config.kbd] -O ~/kanata/config.kbd
-chmod +x ~/kanata/kanata
-
-# 3. Setup permissions (uinput) so it runs smoothly
-# (This allows Kanata to create a virtual keyboard)
-sudo groupadd uinput
-sudo usermod -aG uinput $USER
-echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' | sudo tee /etc/udev/rules.d/99-input.rules
-sudo udevadm control --reload-rules && sudo udevadm trigger
-
-# 4. Run it! 
-# (Keep this terminal open while you want the remappings active)
-sudo ~/kanata/kanata -c ~/kanata/config.kbd
-
 ```
 
-**To Stop the script**
-```bash
-# Option 1: If you are looking at the running terminal
-# Just press Ctrl + C on your keyboard.
-
-# Option 2: Run this command in a NEW terminal tab to kill it instantly
-sudo pkill kanata
-```
+**How to Update Config**
+If you modify the `config.kbd` file, simply press `Ctrl+C` in your terminal to stop Kanata, then run the start command again to reload it.
 
 
 ---
