@@ -53,12 +53,19 @@ sudo kanata --cfg ~/.config/kanata/config.kbd
 
 *Note: When you run step 4, macOS will ask for "Input Monitoring" permissions. Allow it for **Terminal** (or `kanata`), then run the command again.*
 
-#### **3. Controls & Notes**
+#### **3. Controls & Layers**
 
-* **⚠️ Force Quit:** If something goes wrong, press **`Left Ctrl` + `Space` + `Esc**` to instantly kill Kanata and restore your normal keyboard.
-* **Caps Lock Behavior:** On macOS, the "Tap vs Hold" logic is strict.
+* **Top Row Behavior:**
+* **Default:** The top row acts as **Media/Special Keys** (Brightness, Spotlight, Mission Control, Volume, etc.).
+* *Note: F5 and F6 remain as standard function keys.*
+
+
+* **Hold CapsLock:** The top row temporarily becomes standard **F1 - F12** keys.
+
+
+* **Caps Lock Logic:**
 * **Tap (<200ms):** Toggles standard Caps Lock.
-* **Hold (>200ms) OR Combo:** Activates the symbols layer.
+* **Hold (>200ms) OR Combo:** Activates the **Symbols Layer** and transforms the top row into F-keys.
 * *If you press any other key while holding Caps Lock (even for 10ms), it immediately switches to the layer.*
 
 
@@ -76,6 +83,8 @@ sudo pkill -9 -f karabiner
 **How to Update Config**
 If you modify the `config.kbd` file, simply press `Ctrl+C` in your terminal to stop Kanata, then run the start command again to reload it.
 
+**⚠️ Force Quit:** If something goes wrong, press `LeftCtrl + Space + Esc` or `Ctrl+C`to instantly kill Kanata and restore your normal keyboard.
+
 
 ---
 
@@ -92,7 +101,6 @@ sudo pip install evdev
 
 ```
 
-
 2. **Run the Script**: Navigate to the repository folder and run the script with `sudo`:
 ```bash
 sudo python3 key_remapper.py
@@ -104,6 +112,7 @@ sudo python3 key_remapper.py
 3. **(Optional) Run on Startup**: To run this automatically, you will need to create a systemd service or add a sudo-enabled command to your startup applications.
 
 ### 🪟 Windows
+
 
 1. 💾 **Install AHK**: Download and install AutoHotkey from the official [AutoHotkey website](https://www.autohotkey.com/).
 2. 📥 **Run the Scripts**: Download all the `.ahk` files and run them in the following order by double-clicking them:
