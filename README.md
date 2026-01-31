@@ -85,8 +85,44 @@ If you modify the `config.kbd` file, simply press `Ctrl+C` in your terminal to s
 
 **⚠️ Force Quit:** If something goes wrong, press `LeftCtrl + Space + Esc` or `Ctrl+C`to instantly kill Kanata and restore your normal keyboard.
 
-
 ---
+
+### 🐧 Linux Method 1: Kanata (Recommended)
+**Best for:** Performance, gaming, and Online Assessments (Undetectable). Runs at the kernel level.
+
+**Quick Setup (Fedora/Debian/Arch)**
+Copy and paste this entire block into your terminal. It will download the necessary files (the app and your config) to a `~/kanata` folder and run it immediately. No git cloning required.
+
+```bash
+# 1. Create a folder to store Kanata and the Config
+mkdir -p ~/kanata
+
+# 2. Download the Kanata binary and the Configuration file
+wget [https://github.com/jtroo/kanata/releases/download/v1.6.1/kanata](https://github.com/jtroo/kanata/releases/download/v1.6.1/kanata] -O ~/kanata/kanata
+wget [https://raw.githubusercontent.com/riteshrajd/AHK/main/kanata/config.kbd](https://raw.githubusercontent.com/riteshrajd/AHK/main/kanata/config.kbd] -O ~/kanata/config.kbd
+chmod +x ~/kanata/kanata
+
+# 3. Setup permissions (uinput) so it runs smoothly
+# (This allows Kanata to create a virtual keyboard)
+sudo groupadd uinput
+sudo usermod -aG uinput $USER
+echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' | sudo tee /etc/udev/rules.d/99-input.rules
+sudo udevadm control --reload-rules && sudo udevadm trigger
+
+# 4. Run it! 
+# (Keep this terminal open while you want the remappings active)
+sudo ~/kanata/kanata -c ~/kanata/config.kbd
+
+```
+
+**To Stop the script**
+```bash
+# Option 1: If you are looking at the running terminal
+# Just press Ctrl + C on your keyboard.
+
+# Option 2: Run this command in a NEW terminal tab to kill it instantly
+sudo pkill kanata
+```
 
 ### 🐧 Linux Method 2: Python Script (Legacy)
 
@@ -110,6 +146,7 @@ sudo python3 key_remapper.py
 
 *Note: The script must be run as root to grab the input device successfully.*
 3. **(Optional) Run on Startup**: To run this automatically, you will need to create a systemd service or add a sudo-enabled command to your startup applications.
+
 
 ### 🪟 Windows
 
